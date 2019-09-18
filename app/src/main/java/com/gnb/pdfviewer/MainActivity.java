@@ -57,9 +57,19 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                     @Override
                     public void onClick(View v) {
                         if (recyclerView.getVisibility() == View.GONE) {
-                            recyclerView.startAnimation(visibilityAnimationSet);
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    recyclerView.startAnimation(visibilityAnimationSet);
+                                }
+                            });
                         } else if (recyclerView.getVisibility() == View.VISIBLE) {
-                            recyclerView.startAnimation(invisibilityAnimationSet);
+                            recyclerView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    recyclerView.startAnimation(invisibilityAnimationSet);
+                                }
+                            });
                         }
                     }
                 }

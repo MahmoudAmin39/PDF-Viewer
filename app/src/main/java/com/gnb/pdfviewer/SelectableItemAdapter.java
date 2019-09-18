@@ -1,6 +1,5 @@
 package com.gnb.pdfviewer;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,12 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
     @Override
     public void onBindViewHolder(@NonNull SelectableItemViewHolder holder, int position) {
         holder.bindSelectableItem(selectableItems.get(position));
+
+        // Adjust the last item
+        if (position == (selectableItems.size() - 1) && selectableItems.get(position).isSelected()) {
+            ((RecyclerView.LayoutParams) holder.itemView.getLayoutParams()).setMarginEnd(0);
+            holder.getDrawable(R.drawable.rect_rounded_selected_last_item);
+        }
     }
 
     @Override
@@ -75,16 +80,18 @@ public class SelectableItemAdapter extends RecyclerView.Adapter<SelectableItemAd
         void bindSelectableItem(SelectableItem selectableItem) {
             selectableButton.setText(selectableItem.getItemName());
             if (selectableItem.isSelected()) {
-                selectableButton.setBackground(getDrawable(R.drawable.rect_rounded_filled));
-                selectableButton.setTextColor(getColor(android.R.color.white));
+                if (getAdapterPosition() == 0) {
+                    getDrawable(R.drawable.rect_rounded_selected_first_item);
+                } else {
+                    getDrawable(R.drawable.rect_rounded_selected);
+                }
             } else {
-                selectableButton.setBackground(getDrawable(R.drawable.rect_rounded));
-                selectableButton.setTextColor(getColor(R.color.colorAccent));
+                getDrawable(R.drawable.rect_rounded_unselected);
             }
         }
 
-        private Drawable getDrawable(int drawableResource) {
-            return ContextCompat.getDrawable(itemView.getContext(), drawableResource);
+        private void getDrawable(int drawableResource) {
+            selectableButton.setBackground(ContextCompat.getDrawable(itemView.getContext(), drawableResource));
         }
 
         private int getColor(int colorResource) {
